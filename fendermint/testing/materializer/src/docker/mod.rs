@@ -30,11 +30,7 @@ use lazy_static::lazy_static;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 use std::{
-    collections::{BTreeMap, HashMap},
-    os::unix::fs::MetadataExt,
-    path::{Path, PathBuf},
-    str::FromStr,
-    time::Duration,
+    collections::{BTreeMap, HashMap}, os::unix::fs::MetadataExt, path::{Path, PathBuf}, str::FromStr, thread::sleep, time::Duration
 };
 use url::Url;
 
@@ -815,13 +811,15 @@ impl Materializer<DockerMaterials> for DockerMaterializer {
                 --min-validator-stake {} \
                 --bottomup-check-period {} \
                 --permission-mode collateral \
-                --supply-source-kind native \
+                --supply-source-kind erc20 \
+                --supply-source-address {} \
                 ",
             parent_submit_config.subnet.subnet_id,
             subnet_config.creator.eth_addr(),
             subnet_config.min_validators,
             TokenAmount::from_nano(1), // The minimum for native mode that the CLI parses
-            subnet_config.bottom_up_checkpoint.period
+            subnet_config.bottom_up_checkpoint.period,
+            subnet_config.suppry_source_address
         );
 
         // Now run the command and capture the output.
@@ -861,10 +859,11 @@ impl Materializer<DockerMaterials> for DockerMaterializer {
         }
 
         let cmd = format!(
-            "ipc-cli cross-msg fund \
+            "ipc-cli cross-msg fund-with-token \
                 --subnet {} \
                 --from {:?} \
                 --to {:?} \
+                --approve \
                 {} \
             ",
             subnet.subnet_id,
@@ -925,6 +924,7 @@ impl Materializer<DockerMaterials> for DockerMaterializer {
     where
         's: 'a,
     {
+        sleep(Duration::from_secs(180));
         let network_name =
             parent_submit_config.find_node(|n| Some(n.network_name().clone()), |_| None);
 

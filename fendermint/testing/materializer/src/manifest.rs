@@ -165,6 +165,8 @@ pub struct Subnet {
     pub relayers: RelayerMap,
     /// Bottom-up checkpoint configuration.
     pub bottom_up_checkpoint: CheckpointConfig,
+    /// Supply Source Address
+    pub supply_source_address: String,
     /// Custom env vars to pass on to the nodes.
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
     pub env: EnvMap,

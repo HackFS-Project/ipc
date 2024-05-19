@@ -386,12 +386,12 @@ where
                 urls,
             } => {
                 // Establish balances.
-                for (id, a) in self.accounts.iter() {
-                    let reference = ResourceHash::digest(format!("funding {id} from faucet"));
-                    m.fund_from_faucet(a, Some(reference))
-                        .await
-                        .context("faucet failed")?;
-                }
+                // for (id, a) in self.accounts.iter() {
+                //     let reference = ResourceHash::digest(format!("funding {id} from faucet"));
+                //     m.fund_from_faucet(a, Some(reference))
+                //         .await
+                //         .context("faucet failed")?;
+                // }
 
                 // Establish root contract locations.
                 let deployment = match deployment {
@@ -469,6 +469,7 @@ where
                         // Make the number such that the last validator to join activates the subnet.
                         min_validators: subnet.validators.len(),
                         bottom_up_checkpoint: &subnet.bottom_up_checkpoint,
+                        suppry_source_address: &subnet.supply_source_address,
                     },
                 )
                 .await
