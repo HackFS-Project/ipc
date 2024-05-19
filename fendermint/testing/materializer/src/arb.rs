@@ -329,7 +329,7 @@ fn gen_subnets(
             &parent_nodes,
             remaining_balances,
         );
-
+        // TODO - Fix this
         let subnet = Subnet {
             creator,
             validators,
@@ -342,6 +342,7 @@ fn gen_subnets(
                 // Adding 1 because 0 is not accepted by the contracts.
                 period: u64::arbitrary(g).mod_floor(&86400u64) + 1,
             },
+            supply_source_address: String::from("Test"),
         };
 
         let sid = SubnetId::arbitrary(g);

@@ -819,7 +819,7 @@ impl Materializer<DockerMaterials> for DockerMaterializer {
             subnet_config.min_validators,
             TokenAmount::from_nano(1), // The minimum for native mode that the CLI parses
             subnet_config.bottom_up_checkpoint.period,
-            subnet_config.suppry_source_address
+            subnet_config.supply_source_address
         );
 
         // Now run the command and capture the output.
