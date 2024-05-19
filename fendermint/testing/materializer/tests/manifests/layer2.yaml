@@ -16,6 +16,7 @@ rootnet:
 subnets:
   usdt:
     creator: alice
+    supply_source_kind: erc20
     supply_source_address: 0x78AC134Ee700441fD4B0124b77d58CABda3c39f4
     # Minimum collateral is 1 nanoFIL, which is 1_000_000_000 atto
     validators:

@@ -243,7 +243,8 @@ pub struct SubnetConfig<'a, M: Materials> {
     /// Number of validators required for bootstrapping a subnet.
     pub min_validators: usize,
     pub bottom_up_checkpoint: &'a CheckpointConfig,
-    pub supply_source_address: String,
+    pub supply_source_kind: String,
+    pub supply_source_address: Option<String>,
 }
 
 /// Options for how to submit IPC transactions to a subnet.

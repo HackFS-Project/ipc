@@ -469,6 +469,7 @@ where
                         // Make the number such that the last validator to join activates the subnet.
                         min_validators: subnet.validators.len(),
                         bottom_up_checkpoint: &subnet.bottom_up_checkpoint,
+                        supply_source_kind: subnet.supply_source_kind.clone(),
                         supply_source_address: subnet.supply_source_address.clone(),
                     },
                 )

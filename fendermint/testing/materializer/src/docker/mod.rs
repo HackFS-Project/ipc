@@ -800,27 +800,49 @@ impl Materializer<DockerMaterials> for DockerMaterializer {
 
             return Ok(subnet);
         }
-
+        let cmd: String;
+        let token_address = match subnet_config.supply_source_address.clone() {
+            Some(addr) => addr,
+            None => String::from("None"),
+        };
+        if subnet_config.supply_source_kind == "erc20" {
+            cmd = format!(
+                "ipc-cli subnet create \
+                    --parent {} \
+                    --from {:?} \
+                    --min-validators {} \
+                    --min-validator-stake {} \
+                    --bottomup-check-period {} \
+                    --permission-mode collateral \
+                    --supply-source-kind erc20 \
+                    --supply-source-address {} \
+                    ",
+                parent_submit_config.subnet.subnet_id,
+                subnet_config.creator.eth_addr(),
+                subnet_config.min_validators,
+                TokenAmount::from_nano(1), // The minimum for native mode that the CLI parses
+                subnet_config.bottom_up_checkpoint.period,
+                token_address
+            );
+        } else {
+            cmd = format!(
+                "ipc-cli subnet create \
+                    --parent {} \
+                    --from {:?} \
+                    --min-validators {} \
+                    --min-validator-stake {} \
+                    --bottomup-check-period {} \
+                    --permission-mode collateral \
+                    --supply-source-kind native \
+                    ",
+                parent_submit_config.subnet.subnet_id,
+                subnet_config.creator.eth_addr(),
+                subnet_config.min_validators,
+                TokenAmount::from_nano(1), // The minimum for native mode that the CLI parses
+                subnet_config.bottom_up_checkpoint.period,
+            );
+        }
         // TODO: Move --permission-mode to the config
-        // TODO: Move --supply-source-kind to the config
-        let cmd = format!(
-            "ipc-cli subnet create \
-                --parent {} \
-                --from {:?} \
-                --min-validators {} \
-                --min-validator-stake {} \
-                --bottomup-check-period {} \
-                --permission-mode collateral \
-                --supply-source-kind erc20 \
-                --supply-source-address {} \
-                ",
-            parent_submit_config.subnet.subnet_id,
-            subnet_config.creator.eth_addr(),
-            subnet_config.min_validators,
-            TokenAmount::from_nano(1), // The minimum for native mode that the CLI parses
-            subnet_config.bottom_up_checkpoint.period,
-            subnet_config.supply_source_address
-        );
 
         // Now run the command and capture the output.
         let logs = self

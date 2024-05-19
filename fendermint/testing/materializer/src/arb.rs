@@ -342,7 +342,8 @@ fn gen_subnets(
                 // Adding 1 because 0 is not accepted by the contracts.
                 period: u64::arbitrary(g).mod_floor(&86400u64) + 1,
             },
-            supply_source_address: String::from("Test"),
+            supply_source_kind: String::from("native"),
+            supply_source_address: None,
         };
 
         let sid = SubnetId::arbitrary(g);
